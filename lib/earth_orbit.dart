@@ -10,34 +10,19 @@ class Orbit {
   final double period; // days
   final double radius; // km max (apogee)
 
-  // Assuming straight up is 0 radians and 0 days.
+  // Assuming straight right is 0 radians and 0 days.
   double timeToAngle(double days) {
     final double fraction = (days % period) / period;
     return fraction * 2 * math.pi;
   }
 
-  // Offset from Earth's center
+  // Offset from center of orbit
   Offset getLocation(double days) {
     final angle = timeToAngle(days);
-
-    double x;
-    double y;
-    // Slightly different formulas for quadrants 4-1, respectively.
-    if (angle > 3 * math.pi / 2) {
-      x = -radius * math.sin(2 * math.pi - angle);
-      y = -math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
-    } else if (angle > math.pi) {
-      x = -radius * math.sin(angle - math.pi);
-      y = math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
-    } else if (angle > math.pi / 2) {
-      x = radius * math.sin(math.pi - angle);
-      y = math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
-    } else {
-      x = radius * math.sin(angle);
-      y = -math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
-    }
-
-    return Offset(x, y);
+    return Offset(
+      radius * math.cos(angle),
+      radius * math.sin(angle),
+    );
   }
 }
 final Orbit moonOrbit = Orbit(period: 27.322, radius: 405400);

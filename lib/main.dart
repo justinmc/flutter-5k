@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fivek/earth_orbit.dart';
 
@@ -58,7 +57,6 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
     _controller.forward();
   }
 
-
   @override
   Widget build (BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -80,11 +78,14 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
           ),
         ],
       ),
+      /*
+         // TODO date selector?
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         tooltip: 'ok',
         child: Icon(Icons.add),
       ),
+      */
     );
   }
 }
