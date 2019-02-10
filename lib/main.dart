@@ -38,9 +38,9 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
 
     _animation = Tween<double>(
       begin: 0,
-      end: moonOrbit.period,
+      end: earthOrbit.period,
     ).animate(_controller);
-    _controller.duration = Duration(seconds: 2);
+    _controller.duration = Duration(minutes: 1);
     _animation
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -83,22 +83,26 @@ class BoardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Offset center = Offset(
-      this.screenSize.width / 2,
-      this.screenSize.height / 2,
-    );
-
     final Paint sunPaint = Paint()..color = Colors.yellow;
     final Paint earthPaint = Paint()..color = Colors.blue;
     final Paint moonPaint = Paint()..color = Colors.white;
 
-    canvas.drawCircle(center, 50.0, sunPaint);
-    final Offset earthLocation = Offset(200, 200);
+    final Offset sunLocation = Offset(
+      this.screenSize.width / 2,
+      this.screenSize.height / 2,
+    );
+    canvas.drawCircle(sunLocation, 50.0, sunPaint);
+
+    // TODO that maxA should be the actual proportional distance from the sun
+    Scale earthScale = Scale(maxA: 100, maxB: earthOrbit.radius);
+    Offset earthLocationRaw = earthOrbit.getLocation(time);
+    final Offset earthLocation = earthScale.bToAOffset(earthLocationRaw) + sunLocation;
     canvas.drawCircle(earthLocation, 10.0, earthPaint);
 
-    Scale scale = Scale(maxA: 20, maxB: moonOrbit.radius);
+    // TODO that maxA should be the actual proportional distance from earth
+    Scale moonScale = Scale(maxA: 20, maxB: moonOrbit.radius);
     Offset moonLocationRaw = moonOrbit.getLocation(time);
-    Offset moonLocation = scale.bToAOffset(moonLocationRaw) + earthLocation;
+    Offset moonLocation = moonScale.bToAOffset(moonLocationRaw) + earthLocation;
     canvas.drawCircle(moonLocation, 4.0, moonPaint);
   }
 
