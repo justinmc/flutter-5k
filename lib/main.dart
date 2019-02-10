@@ -24,9 +24,6 @@ class SolarSystem extends StatefulWidget {
 class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStateMixin {
   Animation<double> _animation;
   AnimationController _controller;
-  static const double HEXAGON_RADIUS = 32.0;
-  static const double HEXAGON_MARGIN = 1.0;
-  static const int BOARD_RADIUS = 8;
   double _time = 0.0;
 
   @override
@@ -101,7 +98,6 @@ class BoardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO create some master Scale based on the screen size to km
     const double SUN_RADIUS_PX = 50;
     const double SCALE = SUN_RADIUS_PX / SUN_RADIUS;
     const double SIZE_FAKE_FACTOR = 10;
@@ -117,17 +113,12 @@ class BoardPainter extends CustomPainter {
     );
     canvas.drawCircle(sunLocation, SUN_RADIUS_PX, sunPaint);
 
-    // TODO that maxA should be the actual proportional distance from the sun
-    //Scale earthScale = Scale(maxA: 100, maxB: earth.orbitR);
-    Scale earthScale = Scale(maxA: earth.orbitR * SCALE * D_FAKE_FACTOR, maxB: earth.orbitR);
     Offset earthLocationRaw = earth.getLocation(time);
-    final Offset earthLocation = earthScale.bToAOffset(earthLocationRaw) + sunLocation;
+    final Offset earthLocation = earthLocationRaw * SCALE * D_FAKE_FACTOR + sunLocation;
     canvas.drawCircle(earthLocation, earth.r * SCALE * SIZE_FAKE_FACTOR, earthPaint);
 
-    // TODO that maxA should be the actual proportional distance from earth
-    Scale moonScale = Scale(maxA: 20, maxB: moon.orbitR);
     Offset moonLocationRaw = moon.getLocation(time);
-    Offset moonLocation = moonScale.bToAOffset(moonLocationRaw) + earthLocation;
+    Offset moonLocation = moonLocationRaw * SCALE * D_FAKE_FACTOR + earthLocation;
     canvas.drawCircle(moonLocation, moon.r * SCALE * SIZE_FAKE_FACTOR, moonPaint);
   }
 

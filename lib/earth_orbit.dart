@@ -30,29 +30,3 @@ class Planet {
 final Planet moon = Planet(orbitT: 27.322, orbitR: 405400, r: 1737.1);
 final Planet earth = Planet(orbitT: 365.256363004, orbitR: 149598000, r: 6371);
 const double SUN_RADIUS = 696342;
-
-class Scale {
-  Scale({
-    this.maxA,
-    this.maxB,
-  });
-
-  final double maxA;
-  final double maxB;
-
-  aToB(double a) {
-    return a * maxB / maxA;
-  }
-
-  bToA(double b) {
-    return b * maxA / maxB;
-  }
-
-  aToBOffset(Offset a) {
-    return Offset(aToB(a.dx), aToB(a.dy));
-  }
-
-  bToAOffset(Offset b) {
-    return Offset(bToA(b.dx), bToA(b.dy));
-  }
-}
