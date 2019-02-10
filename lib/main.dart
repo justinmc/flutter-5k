@@ -98,10 +98,10 @@ class BoardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const double SUN_RADIUS_PX = 50;
+    const double SUN_RADIUS_PX = 40;
     final double scale = SUN_RADIUS_PX / sun.r;
-    const double SYSTEM_FAKE_FACTOR = 0.01;
-    const double BODY_FAKE_FACTOR = 10;
+    const double SYSTEM_FAKE_FACTOR = 0.015;
+    const double BODY_FAKE_FACTOR = 32;
 
     final Paint sunPaint = Paint()..color = Colors.yellow;
     final Paint earthPaint = Paint()..color = Colors.blue;
@@ -119,6 +119,22 @@ class BoardPainter extends CustomPainter {
 
     Offset moonLocation = moon.getLocation(time) * scale + earthLocation;
     canvas.drawCircle(moonLocation, moon.r * scale * BODY_FAKE_FACTOR, moonPaint);
+
+    canvas.drawCircle(
+      mercury.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
+      mercury.r * scale * BODY_FAKE_FACTOR,
+      Paint()..color = Colors.orange,
+    );
+    canvas.drawCircle(
+      venus.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
+      venus.r * scale * BODY_FAKE_FACTOR,
+      Paint()..color = Colors.green,
+    );
+    canvas.drawCircle(
+      mars.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
+      mars.r * scale * BODY_FAKE_FACTOR,
+      Paint()..color = Colors.red,
+    );
   }
 
   @override
