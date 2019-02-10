@@ -33,15 +33,47 @@ class SolarSystem extends StatefulWidget {
 
   @override _SolarSystemState createState() => _SolarSystemState();
 }
-class _SolarSystemState extends State<SolarSystem> {
+class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStateMixin {
+  Animation<double> _animation;
+  AnimationController _controller;
   static const double HEXAGON_RADIUS = 32.0;
   static const double HEXAGON_MARGIN = 1.0;
   static const int BOARD_RADIUS = 8;
+  double _time = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+    );
+
+    _animation = Tween<double>(
+      begin: 0,
+      end: moonOrbit.period,
+    ).animate(_controller);
+    _controller.duration = Duration(seconds: 2);
+    _animation
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reset();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      })
+      ..addListener(() {
+      setState(() {
+        _time = _animation.value;
+      });
+    });
+    _controller.forward();
+  }
+
 
   @override
   Widget build (BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final BoardPainter painter = BoardPainter(screenSize);
+    final BoardPainter painter = BoardPainter(screenSize: screenSize, time: _time);
     //final Size visibleSize = Size(screenSize.width * 3, screenSize.height * 3);
 
     return Scaffold(
@@ -54,11 +86,13 @@ class _SolarSystemState extends State<SolarSystem> {
 }
 
 class BoardPainter extends CustomPainter {
-  BoardPainter(
+  BoardPainter({
     @required this.screenSize,
-  );
+    @required this.time,
+    });
 
   final Size screenSize;
+  final double time;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -70,8 +104,6 @@ class BoardPainter extends CustomPainter {
     final Paint sunPaint = Paint()..color = Colors.yellow;
     final Paint earthPaint = Paint()..color = Colors.blue;
     final Paint moonPaint = Paint()..color = Colors.white;
-
-    final double time = 0;
 
     canvas.drawCircle(center, 50.0, sunPaint);
     final Offset earthLocation = Offset(200, 200);
@@ -85,7 +117,6 @@ class BoardPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(BoardPainter oldDelegate) {
-    // TODO
-    return false;
+    return time != oldDelegate.time;
   }
 }
