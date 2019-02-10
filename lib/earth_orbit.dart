@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-class Planet {
-  Planet({
+class Body {
+  Body({
     @required this.orbitT,
     @required this.orbitR,
     @required this.r,
@@ -20,6 +20,9 @@ class Planet {
 
   // Offset from center of orbit
   Offset getLocation(double days) {
+    if (orbitT == 0) {
+      return Offset.zero;
+    }
     final angle = timeToAngle(days);
     return Offset(
       orbitR * math.cos(angle),
@@ -27,6 +30,6 @@ class Planet {
     );
   }
 }
-final Planet moon = Planet(orbitT: 27.322, orbitR: 405400, r: 1737.1);
-final Planet earth = Planet(orbitT: 365.256363004, orbitR: 149598000, r: 6371);
-const double SUN_RADIUS = 696342;
+final Body moon = Body(orbitT: 27.322, orbitR: 405400, r: 1737.1);
+final Body earth = Body(orbitT: 365.256363004, orbitR: 149598000, r: 6371);
+final Body sun = Body(orbitT: 0, orbitR: 0, r: 696342);

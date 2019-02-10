@@ -99,9 +99,9 @@ class BoardPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const double SUN_RADIUS_PX = 50;
-    const double SCALE = SUN_RADIUS_PX / SUN_RADIUS;
-    const double SIZE_FAKE_FACTOR = 10;
-    const double D_FAKE_FACTOR = 0.01;
+    final double scale = SUN_RADIUS_PX / sun.r;
+    const double SYSTEM_FAKE_FACTOR = 0.01;
+    const double BODY_FAKE_FACTOR = 10;
 
     final Paint sunPaint = Paint()..color = Colors.yellow;
     final Paint earthPaint = Paint()..color = Colors.blue;
@@ -114,12 +114,11 @@ class BoardPainter extends CustomPainter {
     canvas.drawCircle(sunLocation, SUN_RADIUS_PX, sunPaint);
 
     Offset earthLocationRaw = earth.getLocation(time);
-    final Offset earthLocation = earthLocationRaw * SCALE * D_FAKE_FACTOR + sunLocation;
-    canvas.drawCircle(earthLocation, earth.r * SCALE * SIZE_FAKE_FACTOR, earthPaint);
+    final Offset earthLocation = earthLocationRaw * scale * SYSTEM_FAKE_FACTOR + sunLocation;
+    canvas.drawCircle(earthLocation, earth.r * scale * BODY_FAKE_FACTOR, earthPaint);
 
-    Offset moonLocationRaw = moon.getLocation(time);
-    Offset moonLocation = moonLocationRaw * SCALE * D_FAKE_FACTOR + earthLocation;
-    canvas.drawCircle(moonLocation, moon.r * SCALE * SIZE_FAKE_FACTOR, moonPaint);
+    Offset moonLocation = moon.getLocation(time) * scale + earthLocation;
+    canvas.drawCircle(moonLocation, moon.r * scale * BODY_FAKE_FACTOR, moonPaint);
   }
 
   @override
