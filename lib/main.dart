@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fivek/earth_orbit.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
       ),
       home: SolarSystem(),
       /*
@@ -68,9 +69,18 @@ class BoardPainter extends CustomPainter {
 
     final Paint sunPaint = Paint()..color = Colors.yellow;
     final Paint earthPaint = Paint()..color = Colors.blue;
+    final Paint moonPaint = Paint()..color = Colors.white;
+
+    final double time = 0;
 
     canvas.drawCircle(center, 50.0, sunPaint);
-    canvas.drawCircle(Offset(100, 100), 10.0, earthPaint);
+    final Offset earthLocation = Offset(200, 200);
+    canvas.drawCircle(earthLocation, 10.0, earthPaint);
+
+    Scale scale = Scale(maxA: 100, maxB: moonOrbit.radius);
+    Offset moonLocationRaw = moonOrbit.getLocation(time);
+    Offset moonLocation = scale.bToAOffset(moonLocationRaw) + earthLocation;
+    canvas.drawCircle(moonLocation, 4.0, moonPaint);
   }
 
   @override
