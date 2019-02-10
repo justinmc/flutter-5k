@@ -101,6 +101,12 @@ class BoardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // TODO create some master Scale based on the screen size to km
+    const double SUN_RADIUS_PX = 50;
+    const double SCALE = SUN_RADIUS_PX / SUN_RADIUS;
+    const double SIZE_FAKE_FACTOR = 10;
+    const double D_FAKE_FACTOR = 0.01;
+
     final Paint sunPaint = Paint()..color = Colors.yellow;
     final Paint earthPaint = Paint()..color = Colors.blue;
     final Paint moonPaint = Paint()..color = Colors.white;
@@ -109,19 +115,20 @@ class BoardPainter extends CustomPainter {
       this.screenSize.width / 2,
       this.screenSize.height / 2,
     );
-    canvas.drawCircle(sunLocation, 50.0, sunPaint);
+    canvas.drawCircle(sunLocation, SUN_RADIUS_PX, sunPaint);
 
     // TODO that maxA should be the actual proportional distance from the sun
-    Scale earthScale = Scale(maxA: 100, maxB: earthOrbit.radius);
-    Offset earthLocationRaw = earthOrbit.getLocation(time);
+    //Scale earthScale = Scale(maxA: 100, maxB: earth.orbitR);
+    Scale earthScale = Scale(maxA: earth.orbitR * SCALE * D_FAKE_FACTOR, maxB: earth.orbitR);
+    Offset earthLocationRaw = earth.getLocation(time);
     final Offset earthLocation = earthScale.bToAOffset(earthLocationRaw) + sunLocation;
-    canvas.drawCircle(earthLocation, 10.0, earthPaint);
+    canvas.drawCircle(earthLocation, earth.r * SCALE * SIZE_FAKE_FACTOR, earthPaint);
 
     // TODO that maxA should be the actual proportional distance from earth
-    Scale moonScale = Scale(maxA: 20, maxB: moonOrbit.radius);
-    Offset moonLocationRaw = moonOrbit.getLocation(time);
+    Scale moonScale = Scale(maxA: 20, maxB: moon.orbitR);
+    Offset moonLocationRaw = moon.getLocation(time);
     Offset moonLocation = moonScale.bToAOffset(moonLocationRaw) + earthLocation;
-    canvas.drawCircle(moonLocation, 4.0, moonPaint);
+    canvas.drawCircle(moonLocation, moon.r * SCALE * SIZE_FAKE_FACTOR, moonPaint);
   }
 
   @override

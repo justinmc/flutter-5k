@@ -1,18 +1,20 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-class Orbit {
-  Orbit({
-    @required this.period,
-    @required this.radius,
+class Planet {
+  Planet({
+    @required this.orbitT,
+    @required this.orbitR,
+    @required this.r,
   });
 
-  final double period; // days
-  final double radius; // km max (apogee)
+  final double orbitT; // period in days
+  final double orbitR; // km max (apogee)
+  final double r; // mean radius in km
 
   // Assuming straight right is 0 radians and 0 days.
   double timeToAngle(double days) {
-    final double fraction = (days % period) / period;
+    final double fraction = (days % orbitT) / orbitT;
     return fraction * 2 * math.pi;
   }
 
@@ -20,13 +22,14 @@ class Orbit {
   Offset getLocation(double days) {
     final angle = timeToAngle(days);
     return Offset(
-      radius * math.cos(angle),
-      radius * math.sin(angle),
+      orbitR * math.cos(angle),
+      orbitR * math.sin(angle),
     );
   }
 }
-final Orbit moonOrbit = Orbit(period: 27.322, radius: 405400);
-final Orbit earthOrbit = Orbit(period: 365.256363004, radius: 149598000);
+final Planet moon = Planet(orbitT: 27.322, orbitR: 405400, r: 1737.1);
+final Planet earth = Planet(orbitT: 365.256363004, orbitR: 149598000, r: 6371);
+const double SUN_RADIUS = 696342;
 
 class Scale {
   Scale({
