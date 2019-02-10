@@ -17,7 +17,7 @@ class Body {
   // Assuming straight right is 0 radians and 0 days.
   double timeToAngle(double days) {
     final double fraction = (days % orbitT) / orbitT;
-    return fraction * 2 * math.pi;
+    return 2 * math.pi - fraction * 2 * math.pi;
   }
 
   // Offset from center of orbit
