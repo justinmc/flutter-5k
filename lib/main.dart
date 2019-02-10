@@ -103,42 +103,27 @@ class BoardPainter extends CustomPainter {
     const double SYSTEM_FAKE_FACTOR = 0.015;
     const double BODY_FAKE_FACTOR = 32;
 
-    final Paint sunPaint = Paint()..color = Colors.yellow;
-    final Paint earthPaint = Paint()..color = Colors.blue;
-    final Paint moonPaint = Paint()..color = Colors.white;
-
     final Offset sunLocation = Offset(
       this.screenSize.width / 2,
       this.screenSize.height / 2,
     );
-    canvas.drawCircle(sunLocation, SUN_RADIUS_PX, sunPaint);
-
-    Offset earthLocationRaw = earth.getLocation(time);
-    final Offset earthLocation = earthLocationRaw * scale * SYSTEM_FAKE_FACTOR + sunLocation;
-    canvas.drawCircle(earthLocation, earth.r * scale * BODY_FAKE_FACTOR, earthPaint);
-
+    canvas.drawCircle(sunLocation, SUN_RADIUS_PX, Paint()..color = sun.color);
+    void drawBody(Body body) {
+      canvas.drawCircle(
+        body.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
+        body.r * scale * BODY_FAKE_FACTOR,
+        Paint()..color = body.color,
+      );
+    }
+    drawBody(mercury);
+    drawBody(venus);
+    final Offset earthLocation = earth.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation;
+    drawBody(earth);
     Offset moonLocation = moon.getLocation(time) * scale + earthLocation;
-    canvas.drawCircle(moonLocation, moon.r * scale * BODY_FAKE_FACTOR, moonPaint);
-
-    canvas.drawCircle(
-      mercury.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
-      mercury.r * scale * BODY_FAKE_FACTOR,
-      Paint()..color = Colors.orange,
-    );
-    canvas.drawCircle(
-      venus.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
-      venus.r * scale * BODY_FAKE_FACTOR,
-      Paint()..color = Colors.green,
-    );
-    canvas.drawCircle(
-      mars.getLocation(time) * scale * SYSTEM_FAKE_FACTOR + sunLocation,
-      mars.r * scale * BODY_FAKE_FACTOR,
-      Paint()..color = Colors.red,
-    );
+    canvas.drawCircle(moonLocation, moon.r * scale * BODY_FAKE_FACTOR, Paint()..color = moon.color);
+    drawBody(mars);
   }
 
   @override
-  bool shouldRepaint(BoardPainter oldDelegate) {
-    return time != oldDelegate.time;
-  }
+  bool shouldRepaint(BoardPainter oldDelegate) => time != oldDelegate.time;
 }
