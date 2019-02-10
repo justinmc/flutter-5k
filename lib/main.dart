@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fivek/earth_orbit.dart';
 
@@ -38,9 +39,9 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
 
     _animation = Tween<double>(
       begin: 0,
-      end: earthOrbit.period,
+      end: 1,
     ).animate(_controller);
-    _controller.duration = Duration(minutes: 1);
+    _controller.duration = Duration(milliseconds: 100); // 10 days per second
     _animation
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -51,7 +52,7 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
       })
       ..addListener(() {
       setState(() {
-        _time = _animation.value;
+        _time = _time.floor() + _animation.value;
       });
     });
     _controller.forward();
@@ -63,10 +64,26 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
     final Size screenSize = MediaQuery.of(context).size;
     final BoardPainter painter = BoardPainter(screenSize: screenSize, time: _time);
 
+    final DateTime date = DateTime.now().add(Duration(days: _time.toInt()));
+
     return Scaffold(
-      body: CustomPaint(
-        size: Size.infinite,
-        painter: painter,
+      body: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: <Widget>[
+          CustomPaint(
+            size: Size.infinite,
+            painter: painter,
+          ),
+          Positioned(
+            top: 50,
+            child: Text('${date.year}.${date.month}.${date.day}'),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'ok',
+        child: Icon(Icons.add),
       ),
     );
   }

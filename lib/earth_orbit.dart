@@ -1,11 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-class EarthOrbit {
-  EarthOrbit();
-
-}
-
 class Orbit {
   Orbit({
     @required this.period,
