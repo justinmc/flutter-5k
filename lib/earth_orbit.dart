@@ -29,13 +29,13 @@ class Orbit {
     double y;
     // Slightly different formulas for quadrants 4-1, respectively.
     if (angle > 3 * math.pi / 2) {
-      x = -radius * math.sin(angle - 3 * math.pi / 2);
+      x = -radius * math.sin(2 * math.pi - angle);
       y = -math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
     } else if (angle > math.pi) {
       x = -radius * math.sin(angle - math.pi);
       y = math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
     } else if (angle > math.pi / 2) {
-      x = radius * math.sin(angle - math.pi / 2);
+      x = radius * math.sin(math.pi - angle);
       y = math.sqrt(math.pow(radius, 2) - math.pow(x, 2));
     } else {
       x = radius * math.sin(angle);

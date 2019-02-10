@@ -12,18 +12,6 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       home: SolarSystem(),
-      /*
-      home: Builder(
-        builder: (BuildContext context) {
-          final Size screenSize = MediaQuery.of(context).size;
-          return Transform(
-            transform: Matrix4.identity()
-              ..translate(screenSize.width / 2, screenSize.height / 2),
-            child: SolarSystem(),
-          );
-        },
-      ),
-      */
     );
   }
 }
@@ -74,7 +62,6 @@ class _SolarSystemState extends State<SolarSystem> with SingleTickerProviderStat
   Widget build (BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final BoardPainter painter = BoardPainter(screenSize: screenSize, time: _time);
-    //final Size visibleSize = Size(screenSize.width * 3, screenSize.height * 3);
 
     return Scaffold(
       body: CustomPaint(
@@ -109,7 +96,7 @@ class BoardPainter extends CustomPainter {
     final Offset earthLocation = Offset(200, 200);
     canvas.drawCircle(earthLocation, 10.0, earthPaint);
 
-    Scale scale = Scale(maxA: 100, maxB: moonOrbit.radius);
+    Scale scale = Scale(maxA: 20, maxB: moonOrbit.radius);
     Offset moonLocationRaw = moonOrbit.getLocation(time);
     Offset moonLocation = scale.bToAOffset(moonLocationRaw) + earthLocation;
     canvas.drawCircle(moonLocation, 4.0, moonPaint);
